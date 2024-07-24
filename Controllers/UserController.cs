@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Project.middleWare;
+using Image_Encryption.midlleware;
 
 namespace Image_Encryption.Controllers
 {
@@ -17,12 +19,36 @@ namespace Image_Encryption.Controllers
     {
         private readonly IUserService _IUserService;
 
-        public UserController(IUserService userService)
+        private readonly JwtTokenMiddleware _JwtTokenMiddleware;
+
+        public UserController(IUserService userService, JwtTokenMiddleware JwtTokenMiddleware)
         {
             _IUserService = userService;
+            _JwtTokenMiddleware = JwtTokenMiddleware;
         }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromQuery] int id, [FromQuery] string password)
+        {
+            try
+            {
+                var user = await _IUserService.Loggin(id, password);
+                if (user == null)
+                    return Unauthorized();
 
-        [HttpPost]
+                var token = _JwtTokenMiddleware.GenerateToken(id.ToString());
+                return Ok(new { Token = token });
+            }
+            catch (Exception ex)
+            {
+                await Console.Out.WriteLineAsync(ex.Message);
+                throw;
+            }
+            
+        }
+    
+
+
+    [HttpPost]
         public async Task<ActionResult> AddUser([FromBody] UserDto newUser)
         {
             try
@@ -129,5 +155,6 @@ namespace Image_Encryption.Controllers
                 return StatusCode(500, "An error occurred while resetting the password.");
             }
         }
+
     }
 }

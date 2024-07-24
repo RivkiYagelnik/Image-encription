@@ -4,6 +4,7 @@ using BL;
 using BL.Interfaces;
 using BL.Services;
 using DAL.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Image_Encryption.Controllers
 {
@@ -16,6 +17,8 @@ namespace Image_Encryption.Controllers
         {
             _IPictureService = IPictureService;
         }
+
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -71,6 +74,7 @@ namespace Image_Encryption.Controllers
         //    }
         //}
 
+        [Authorize]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -106,6 +110,8 @@ namespace Image_Encryption.Controllers
                 return BadRequest($"{ex.Message}"); 
             }
         }
+
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -124,6 +130,7 @@ namespace Image_Encryption.Controllers
                 return BadRequest(ex);
             }
         }
+
         [HttpGet("DecryptMessageFromImage")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

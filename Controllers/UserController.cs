@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Project.middleWare;
 using Image_Encryption.midlleware;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Image_Encryption.Controllers
 {
@@ -48,7 +49,7 @@ namespace Image_Encryption.Controllers
     
 
 
-    [HttpPost]
+        [HttpPost]
         public async Task<ActionResult> AddUser([FromBody] UserDto newUser)
         {
             try
@@ -65,6 +66,7 @@ namespace Image_Encryption.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult> UpdateUser([FromBody] UserDto user)
         {
@@ -82,6 +84,7 @@ namespace Image_Encryption.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserById(int id)
         {
@@ -99,6 +102,7 @@ namespace Image_Encryption.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("GetAllUsers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -121,6 +125,7 @@ namespace Image_Encryption.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("ResetPassword")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
